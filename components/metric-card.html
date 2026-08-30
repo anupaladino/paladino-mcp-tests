@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MetricCard — Paladino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-black: #000000;
+    --color-white: #FFFFFF;
+    --color-gray-normal: #AEB0B7;
+    --black-alpha-5: rgba(0, 0, 0, 0.05);
+    --black-alpha-50: rgba(0, 0, 0, 0.5);
+    --white-alpha-10: rgba(255, 255, 255, 0.1);
+    --white-alpha-50: rgba(255, 255, 255, 0.5);
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .section {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: center;
+    gap: 24px;
+    padding: 64px 24px;
+  }
+
+  .section--light {
+    background: var(--color-white);
+  }
+
+  .section--gray {
+    background: var(--color-gray-normal);
+  }
+
+  .section--dark {
+    background: var(--color-black);
+  }
+
+  .metric-card {
+    width: 480px;
+    max-width: 100%;
+    padding: 32px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .metric-card__label {
+    margin: 0;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: 0;
+  }
+
+  .metric-card__value {
+    margin: 0;
+  }
+
+  .metric-card__value--heading2 {
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 68px;
+    letter-spacing: -1.8px;
+  }
+
+  .metric-card__value--title2 {
+    font-weight: 600;
+    font-size: 100px;
+    line-height: 108px;
+    letter-spacing: -3px;
+  }
+
+  /* Light e Gray: cartão com leve véu preto sobre o fundo da seção */
+  .section--light .metric-card,
+  .section--gray .metric-card {
+    background: var(--black-alpha-5);
+  }
+
+  /* Dark: cartão com leve véu branco */
+  .section--dark .metric-card {
+    background: var(--white-alpha-10);
+  }
+
+  /* Texto: só o tema Light usa preto — Gray e Dark usam branco, igual ao componente original */
+  .section--light .metric-card__label {
+    color: var(--black-alpha-50);
+  }
+
+  .section--light .metric-card__value {
+    color: var(--color-black);
+  }
+
+  .section--gray .metric-card__label,
+  .section--dark .metric-card__label {
+    color: var(--white-alpha-50);
+  }
+
+  .section--gray .metric-card__value,
+  .section--dark .metric-card__value {
+    color: var(--color-white);
+  }
+</style>
+</head>
+<body>
+
+  <section class="section section--light">
+    <div class="metric-card">
+      <p class="metric-card__label">Dimensões interdependentes</p>
+      <p class="metric-card__value metric-card__value--heading2">4</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-card__label">Conversões em cascata</p>
+      <p class="metric-card__value metric-card__value--title2">4</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-card__label">Fonte teórica</p>
+      <p class="metric-card__value metric-card__value--heading2">Marco Chaparro</p>
+    </div>
+  </section>
+
+  <section class="section section--gray">
+    <div class="metric-card">
+      <p class="metric-card__label">Dimensões interdependentes</p>
+      <p class="metric-card__value metric-card__value--heading2">4</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-card__label">Conversões em cascata</p>
+      <p class="metric-card__value metric-card__value--title2">4</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-card__label">Fonte teórica</p>
+      <p class="metric-card__value metric-card__value--heading2">Marco Chaparro</p>
+    </div>
+  </section>
+
+  <section class="section section--dark">
+    <div class="metric-card">
+      <p class="metric-card__label">Dimensões interdependentes</p>
+      <p class="metric-card__value metric-card__value--heading2">4</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-card__label">Conversões em cascata</p>
+      <p class="metric-card__value metric-card__value--title2">4</p>
+    </div>
+    <div class="metric-card">
+      <p class="metric-card__label">Fonte teórica</p>
+      <p class="metric-card__value metric-card__value--heading2">Marco Chaparro</p>
+    </div>
+  </section>
+
+</body>
+</html>

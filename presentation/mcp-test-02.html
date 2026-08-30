@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALADINO — MCP Test 02</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --black-50: rgba(0, 0, 0, 0.5);
+    --black-5: rgba(0, 0, 0, 0.05);
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: #E4E4E7;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .deck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 32px 0 96px;
+  }
+
+  .slide-slot {
+    display: flex;
+    justify-content: center;
+  }
+
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    flex-shrink: 0;
+    background: var(--white);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    transform-origin: top center;
+  }
+
+  /* ---- type tokens ---- */
+  .caption {
+    margin: 0;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    letter-spacing: 0;
+    color: var(--black-50);
+  }
+
+  .title-1 {
+    margin: 0;
+    font-weight: 700;
+    font-size: 150px;
+    line-height: 150px;
+    letter-spacing: -4.5px;
+    color: var(--black);
+  }
+
+  .heading-1 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 75px;
+    line-height: 84px;
+    letter-spacing: -2.25px;
+    color: var(--black);
+  }
+
+  .heading-2 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 68px;
+    letter-spacing: -1.8px;
+    color: var(--black);
+  }
+
+  .subtitle-2 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 60px;
+    line-height: 68px;
+    letter-spacing: -1.8px;
+    color: var(--black-50);
+  }
+
+  .paragraph-1 {
+    margin: 0;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: -1.08px;
+    color: var(--black-50);
+  }
+
+  .footer-line {
+    margin: 0;
+    font-weight: 500;
+    font-size: 24px;
+    line-height: 32px;
+    letter-spacing: -0.48px;
+    color: var(--black);
+  }
+
+  /* ---- PageHeader Type1: título hero + parágrafo de apoio opcional ---- */
+  .page-header-1 {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .page-header-1 .heading-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .page-header-1 .paragraph-1 {
+    width: 1063px;
+    flex-shrink: 0;
+  }
+
+  /* ---- PageHeader Type2: heading editorial + parágrafo de apoio opcional ---- */
+  .page-header-2 {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
+  }
+
+  .page-header-2 .heading-col {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    flex: 1;
+    min-width: 0;
+  }
+
+  .page-header-2 .paragraph-1 {
+    width: 1063px;
+    flex-shrink: 0;
+  }
+
+  /* ---- CardText ---- */
+  .card-text {
+    background: var(--black-5);
+    border-radius: 15px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    flex: 1;
+  }
+
+  .card-text .card-text-head {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .card-text .category {
+    margin: 0;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--black-50);
+  }
+
+  .card-text .title {
+    margin: 0;
+    font-weight: 500;
+    font-size: 36px;
+    line-height: 44px;
+    letter-spacing: -1.08px;
+    color: var(--black);
+  }
+
+  .card-text .description {
+    margin: 0;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 28px;
+    color: var(--black-50);
+  }
+
+  /* ---- layout: cover / closing (Frame 01) ---- */
+  .cover-slide {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+
+  .cover-slide .heading-block {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+
+  .cover-slide .footer-block {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ---- layout: statement + support (Frame 05) ---- */
+  .statement-slide {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .statement-slide .heading-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    flex: 1;
+  }
+
+  .statement-slide .support-col {
+    width: 1063px;
+    flex-shrink: 0;
+  }
+
+  .statement-slide .support-col .paragraph-1 + .paragraph-1 {
+    margin-top: 12px;
+  }
+
+  /* ---- layout: system grid (Frame 09) ---- */
+  .system-slide {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+  }
+
+  .system-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+
+  /* ---- layout: dimensão (Frame 07) ---- */
+  .dimension-slide {
+    flex: 1;
+    display: flex;
+    gap: 24px;
+    align-items: stretch;
+  }
+
+  .dimension-slide .dimension-header {
+    width: 442px;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding-top: 8px;
+  }
+
+  .dimension-slide .dimension-list {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- SLIDE 01 — COVER (layout Frame 01: PageHeader Type1 + rodapé) -->
+  <div class="slide-slot"><div class="slide" id="slide-01">
+    <div class="cover-slide">
+      <div class="heading-block">
+        <p class="title-1">PALADINO</p>
+        <p class="title-1">Como um negócio se torna uma marca.</p>
+      </div>
+      <div class="footer-block">
+        <p class="footer-line">Dimensões de Marca</p>
+        <p class="footer-line">MCP Test 02</p>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 02 — THE PROBLEM (layout Frame 05: PageHeader Type2 + coluna de apoio, lista subordinada) -->
+  <div class="slide-slot"><div class="slide" id="slide-02">
+    <div class="statement-slide">
+      <div class="heading-col">
+        <p class="heading-2">O mercado fragmentou aquilo que sempre operou como um sistema.</p>
+      </div>
+      <div class="support-col">
+        <p class="paragraph-1">Estratégia.</p>
+        <p class="paragraph-1">Modelo de negócio.</p>
+        <p class="paragraph-1">Identidade.</p>
+        <p class="paragraph-1">Branding.</p>
+        <p class="paragraph-1">Marketing.</p>
+        <p class="paragraph-1" style="margin-top: 24px;">Foram transformados em disciplinas independentes.</p>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 03 — THE CONSEQUENCE (layout Frame 05, reaproveitado: PageHeader Type2 + parágrafo corrido) -->
+  <div class="slide-slot"><div class="slide" id="slide-03">
+    <div class="statement-slide">
+      <div class="heading-col">
+        <p class="heading-2">O problema não é a falta de competência.</p>
+        <p class="heading-2">É a falta de um princípio comum.</p>
+      </div>
+      <div class="support-col">
+        <p class="paragraph-1">Negócios acumulam excelentes entregas e, ainda assim, têm dificuldade para operar com clareza, coerência e direção.</p>
+        <p class="paragraph-1" style="margin-top: 24px;">O problema raramente está na qualidade de cada disciplina isolada.</p>
+        <p class="paragraph-1" style="margin-top: 24px;">Está na ausência de uma compreensão compartilhada sobre aquilo que o negócio realmente é.</p>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 04 — THE THESIS (PageHeader Type1 isolado: título + subtítulo no mesmo peso + parágrafo de apoio) -->
+  <div class="slide-slot"><div class="slide" id="slide-04">
+    <div class="page-header-1" style="flex: 1; align-items: center;">
+      <div class="heading-col">
+        <p class="heading-1">Uma marca não é algo que um negócio possui.</p>
+        <p class="heading-1">É algo que um negócio se torna.</p>
+      </div>
+      <p class="paragraph-1">Isso acontece quando aquilo que o negócio é consegue permanecer íntegro enquanto ganha estrutura, expressão e experiência.</p>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 05 — THE SYSTEM (layout Frame 09: PageHeader Type1 + grade 2x2 de CardText) -->
+  <div class="slide-slot"><div class="slide" id="slide-05">
+    <div class="system-slide">
+      <div class="heading-col" style="display:flex; flex-direction:column; gap:12px;">
+        <p class="title-1">Quatro dimensões.</p>
+        <p class="title-1">Um único organismo.</p>
+      </div>
+      <div class="system-grid">
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="category">01</p>
+            <p class="title">Ontológica</p>
+          </div>
+          <p class="description">Essência</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="category">02</p>
+            <p class="title">Operacional</p>
+          </div>
+          <p class="description">Estrutura</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="category">03</p>
+            <p class="title">Simbólica</p>
+          </div>
+          <p class="description">Expressão</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="category">04</p>
+            <p class="title">Relacional</p>
+          </div>
+          <p class="description">Experiência</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 06 — ONTOLÓGICA (layout Frame 07: PageHeader Type2 estreito + lista de 3 CardText) -->
+  <div class="slide-slot"><div class="slide" id="slide-06">
+    <div class="dimension-slide">
+      <div class="dimension-header">
+        <p class="caption">01 — Ontológica</p>
+        <p class="heading-2">Quem somos?</p>
+      </div>
+      <div class="dimension-list">
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">A natureza do negócio não é criada. É descoberta.</p>
+          </div>
+          <p class="description">Investigamos aquilo que já existe, aquilo que permanece latente e aquilo que somente aquele negócio poderia realizar.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">O objetivo não é inventar uma nova identidade.</p>
+          </div>
+          <p class="description">É revelar aquilo que sempre esteve presente.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="category">Verbo</p>
+            <p class="title">Descobrir</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 07 — OPERACIONAL (mesmo layout Frame 07) -->
+  <div class="slide-slot"><div class="slide" id="slide-07">
+    <div class="dimension-slide">
+      <div class="dimension-header">
+        <p class="caption">02 — Operacional</p>
+        <p class="heading-2">Somos capazes de sustentar quem somos?</p>
+      </div>
+      <div class="dimension-list">
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">É onde essência vira capacidade:</p>
+          </div>
+          <p class="description">processos, produtos, serviços, pessoas e estrutura.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">O diagnóstico mais recorrente não é a ausência de inovação.</p>
+          </div>
+          <p class="description">É o acúmulo de incoerências.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">Crescer sem coerência não amplia potência. Dispersa.</p>
+          </div>
+          <p class="description">Verbo: Sustentar</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 08 — SIMBÓLICA (mesmo layout Frame 07) -->
+  <div class="slide-slot"><div class="slide" id="slide-08">
+    <div class="dimension-slide">
+      <div class="dimension-header">
+        <p class="caption">03 — Simbólica</p>
+        <p class="heading-2">Conseguimos tornar isso perceptível?</p>
+      </div>
+      <div class="dimension-list">
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">Identidade não é o objetivo.</p>
+          </div>
+          <p class="description">É uma das manifestações de algo maior: tornar reconhecível aquilo que o negócio representa.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">A expressão não compensa a ausência de essência.</p>
+          </div>
+          <p class="description">Também não corrige fragilidades estruturais.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">Uma marca não cria significado. Ela torna perceptível aquilo que representa.</p>
+          </div>
+          <p class="description">Verbo: Revelar</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 09 — RELACIONAL (mesmo layout Frame 07; sem layout de processo/loop no template — ver limitações) -->
+  <div class="slide-slot"><div class="slide" id="slide-09">
+    <div class="dimension-slide">
+      <div class="dimension-header">
+        <p class="caption">04 — Relacional</p>
+        <p class="heading-2">O mundo confirma aquilo que acreditamos ser?</p>
+      </div>
+      <div class="dimension-list">
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">É onde expressão encontra experiência.</p>
+          </div>
+          <p class="description">A marca entra em movimento, encontra resposta, aprende e recalibra o sistema.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="title">Interação é o mecanismo. Ressonância é o fenômeno.</p>
+          </div>
+          <p class="description">A resposta do contexto retorna ao sistema e pode fortalecer, aprofundar ou revisar as demais dimensões.</p>
+        </div>
+        <div class="card-text">
+          <div class="card-text-head">
+            <p class="category">Verbo</p>
+            <p class="title">Aprender</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE 10 — CLOSING (mesmo padrão do Cover: PageHeader Type1 completo + rodapé) -->
+  <div class="slide-slot"><div class="slide" id="slide-10">
+    <div class="cover-slide">
+      <div class="heading-block">
+        <p class="caption">Essência → Estrutura → Expressão → Experiência</p>
+        <p class="title-1">INTEGRIDADE EM OPERAÇÃO.</p>
+        <p class="paragraph-1" style="width: 1063px; margin-top: 12px;">Quando as quatro dimensões permanecem íntegras, crescimento, expansão e mudança deixam de diluir o negócio. Passam a ser orientados por aquilo que ele é.</p>
+      </div>
+      <div class="footer-block">
+        <p class="footer-line">PALADINO</p>
+      </div>
+    </div>
+  </div></div>
+
+</div>
+
+<script>
+  function fitSlides() {
+    var margin = 48;
+    var scale = Math.min(1, (window.innerWidth - margin) / 1920);
+    document.querySelectorAll('.slide').forEach(function (slide) {
+      slide.style.transform = 'scale(' + scale + ')';
+      slide.style.marginBottom = (-1080 * (1 - scale)) + 'px';
+    });
+  }
+  window.addEventListener('resize', fitSlides);
+  fitSlides();
+</script>
+
+</body>
+</html>

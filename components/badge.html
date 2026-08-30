@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Badge — Paladino</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --color-black: #000000;
+    --color-white: #FFFFFF;
+    --color-gray-normal: #AEB0B7;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    margin: 0;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 80px 24px;
+  }
+
+  .section--light {
+    background: var(--color-white);
+  }
+
+  .section--gray {
+    background: var(--color-gray-normal);
+  }
+
+  .section--dark {
+    background: var(--color-black);
+  }
+
+  .badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 14px 24px;
+    border-radius: 99px;
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0;
+    white-space: nowrap;
+  }
+
+  /* Style1: contraste alto, inverte conforme o tom da seção */
+  .section--light .badge--solid {
+    background: var(--color-black);
+    color: var(--color-white);
+  }
+
+  .section--gray .badge--solid,
+  .section--dark .badge--solid {
+    background: var(--color-white);
+    color: var(--color-black);
+  }
+
+  /* Style2: tom fixo de cinza, independente da seção */
+  .badge--muted {
+    background: var(--color-gray-normal);
+    color: var(--color-white);
+  }
+</style>
+</head>
+<body>
+
+  <section class="section section--light">
+    <span class="badge badge--solid">Ontológica</span>
+    <span class="badge badge--muted">Operacional</span>
+  </section>
+
+  <section class="section section--gray">
+    <span class="badge badge--solid">Simbólica</span>
+    <span class="badge badge--muted">Relacional</span>
+  </section>
+
+  <section class="section section--dark">
+    <span class="badge badge--solid">Ontológica</span>
+    <span class="badge badge--muted">Operacional</span>
+  </section>
+
+</body>
+</html>
