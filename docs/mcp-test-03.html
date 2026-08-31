@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PALADINO — MCP Test 03</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #000000;
+    --white: #FFFFFF;
+    --black-50: rgba(0, 0, 0, 0.5);
+    --black-25: rgba(0, 0, 0, 0.25);
+    --black-10: rgba(0, 0, 0, 0.1);
+    --black-5: rgba(0, 0, 0, 0.05);
+    --white-50: rgba(255, 255, 255, 0.5);
+    --white-10: rgba(255, 255, 255, 0.1);
+    --gray-dark: #7D7E83;
+    --gray-lighter: #E4E4E7;
+  }
+
+  * { box-sizing: border-box; }
+
+  html, body {
+    margin: 0;
+    background: #E4E4E7;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .deck {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    padding: 32px 0 96px;
+  }
+
+  .slide-slot { display: flex; justify-content: center; }
+
+  .slide {
+    width: 1920px;
+    height: 1080px;
+    flex-shrink: 0;
+    background: var(--white);
+    padding: 40px;
+    position: relative;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+    transform-origin: top center;
+  }
+
+  /* ---- type tokens ---- */
+  .caption { margin: 0; font-weight: 500; font-size: 20px; line-height: 28px; color: var(--black-50); }
+  .heading-2 { margin: 0; font-weight: 500; font-size: 60px; line-height: 68px; letter-spacing: -1.8px; color: var(--black); }
+  .subtitle-2 { margin: 0; font-weight: 500; font-size: 60px; line-height: 68px; letter-spacing: -1.8px; color: var(--black-50); }
+  .paragraph-1 { margin: 0; font-weight: 500; font-size: 36px; line-height: 44px; letter-spacing: -1.08px; color: var(--black-50); }
+  .text-sm { margin: 0; font-weight: 500; font-size: 14px; line-height: 20px; color: var(--black-50); }
+
+  /* ---- PageHeader Type2 ---- */
+  .page-header-2 { display: flex; gap: 24px; align-items: flex-start; }
+  .page-header-2 .heading-col { display: flex; flex-direction: column; gap: 12px; flex: 1; min-width: 0; }
+  .page-header-2 .support { width: 620px; flex-shrink: 0; }
+
+  /* ---- CardText ---- */
+  .card-text {
+    background: var(--black-5);
+    border-radius: 15px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 20px;
+    flex: 1;
+  }
+  .card-text .head { display: flex; flex-direction: column; gap: 12px; }
+  .card-text .category { margin: 0; font-weight: 500; font-size: 20px; line-height: 28px; color: var(--black-50); }
+  .card-text .title { margin: 0; font-weight: 500; font-size: 36px; line-height: 44px; letter-spacing: -1.08px; color: var(--black); }
+  .card-text .description { margin: 0; font-weight: 500; font-size: 20px; line-height: 28px; color: var(--black-50); }
+
+  /* ---- CardText, tamanho reduzido p/ grades densas (Slide A, D, F) ---- */
+  .card-text.is-compact .title { font-size: 28px; line-height: 36px; letter-spacing: 0; }
+  .card-text.is-compact .description { font-size: 18px; line-height: 24px; }
+
+  /* ---- CardHighlight ---- */
+  .card-highlight {
+    background: var(--gray-dark);
+    border-radius: 15px;
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 24px;
+    color: var(--white);
+    flex: 1;
+  }
+  .card-highlight .primary { margin: 0; font-weight: 500; font-size: 28px; line-height: 36px; letter-spacing: 0; color: var(--white); }
+  .card-highlight .secondary { margin: 0; font-weight: 500; font-size: 18px; line-height: 24px; color: var(--white); }
+
+  /* ---- TextBlock (sem fundo) ---- */
+  .text-block { display: flex; flex-direction: column; gap: 16px; }
+  .text-block .title { margin: 0; font-weight: 500; font-size: 20px; line-height: 28px; color: var(--black); }
+  .text-block .description { margin: 0; font-weight: 500; font-size: 20px; line-height: 28px; color: var(--black-50); }
+
+  /* ---- Tag pill (reaproveita a lógica tonal do Badge) ---- */
+  .tag-row { display: flex; gap: 8px; flex-wrap: wrap; }
+  .tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 8px 16px;
+    border-radius: 99px;
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+  }
+  .tag--on-dark { background: var(--white-10); color: var(--white); }
+  .tag--on-light { background: var(--black-10); color: var(--black); }
+
+  /* ---- status footer de decisão ---- */
+  .status-line { margin: 0; font-weight: 500; font-size: 14px; line-height: 20px; }
+  .status-line--on-dark { color: var(--white-50); }
+  .status-line--on-light { color: var(--black-50); }
+
+  /* ---- Timeline1 (com linha conectora em CSS) ---- */
+  .timeline-row { display: flex; gap: 24px; position: relative; flex: 1; }
+  .timeline-row::before {
+    content: '';
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    right: 12px;
+    height: 2px;
+    background: var(--gray-lighter);
+    z-index: 0;
+  }
+  .timeline-step { flex: 1; display: flex; flex-direction: column; gap: 32px; position: relative; z-index: 1; }
+  .timeline-step .dot { width: 24px; height: 24px; border-radius: 99px; background: var(--white); border: 2px solid var(--gray-lighter); display: flex; align-items: center; justify-content: center; }
+  .timeline-step .title { margin: 0; font-weight: 500; font-size: 28px; line-height: 36px; letter-spacing: 0; color: var(--black-50); }
+  .timeline-step .status { margin: 0; font-weight: 500; font-size: 16px; line-height: 20px; color: var(--black-50); }
+  .timeline-step .description { margin: 8px 0 0; font-weight: 500; font-size: 16px; line-height: 22px; color: var(--black-50); }
+
+  .timeline-step.is-active .dot { background: linear-gradient(180deg, #62656A, #91969C); border-color: var(--gray-lighter); }
+  .timeline-step.is-active .title { color: var(--black); }
+  .timeline-step.is-active .status { color: var(--black); }
+  .timeline-step.is-active .description { color: var(--black-50); }
+
+  /* ---- grids ---- */
+  .grid-4 { flex: 1; display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px; }
+  .grid-2x2 { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; }
+  .grid-2col { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; align-content: start; }
+  .row-2 { flex: 1; display: grid; grid-template-columns: repeat(2, 1fr); gap: 24px; }
+  .row-3 { flex: 1; display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+
+  .split { display: flex; gap: 40px; flex: 1; }
+  .split .col-left { width: 620px; flex-shrink: 0; display: flex; flex-direction: column; gap: 24px; }
+  .split .col-right { flex: 1; display: flex; flex-direction: column; gap: 16px; }
+  .split .col-right .heading-2 { margin-bottom: 4px; }
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+  <!-- SLIDE A — SINAIS (grade de 4 colunas) -->
+  <div class="slide-slot"><div class="slide" id="slide-a">
+    <div class="page-header-2">
+      <div class="heading-col">
+        <p class="caption">01</p>
+        <p class="heading-2">O que o material revelou</p>
+        <p class="subtitle-2">Leitura superficial antes de aprofundar</p>
+      </div>
+      <p class="paragraph-1 support">Antes de qualquer definição, o processo deixou quatro sinais claros. São fatos sobre o negócio que existem independentemente de qualquer decisão estratégica.</p>
+    </div>
+    <div class="grid-4">
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Sinal 01</p>
+          <p class="title">O rigor existe. A reputação também.</p>
+        </div>
+        <p class="description">Mais de uma década de operação construiu algo raro: uma base de clientes que não precisa ser convencida. O diferencial já existe. Não foi comunicado ainda.</p>
+      </div>
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Sinal 02</p>
+          <p class="title">A percepção chega tarde.</p>
+        </div>
+        <p class="description">O cliente novo vê "boa comida". O cliente recorrente sabe que é outra coisa. O gap entre a primeira e a segunda visita é o principal problema de crescimento.</p>
+      </div>
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Sinal 03</p>
+          <p class="title">O negócio está pronto para expandir.</p>
+        </div>
+        <p class="description">A limitação não é capacidade nem qualidade. É estrutura. Não existe arquitetura que organize o que o Galo Cinza já sabe fazer.</p>
+      </div>
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Sinal 04</p>
+          <p class="title">O território existe. Falta nomeá-lo.</p>
+        </div>
+        <p class="description">Os valores que guiam a operação há décadas nunca foram declarados como posição. Isso não é fraqueza — é oportunidade. Está disponível para ser ocupado.</p>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE B — DOIS TERRITÓRIOS (CardHighlight = recomendação, CardText = alternativa; composto) -->
+  <div class="slide-slot"><div class="slide" id="slide-b">
+    <div class="page-header-2">
+      <div class="heading-col">
+        <p class="caption">03</p>
+        <p class="heading-2">Territórios candidatos</p>
+        <p class="subtitle-2">Dois caminhos para nomear o que o Galo Cinza é</p>
+      </div>
+      <p class="paragraph-1 support">Ambos emergem do mesmo conjunto de valores. A diferença está na ênfase: o que vem primeiro quando o Galo Cinza se apresenta ao mundo.</p>
+    </div>
+    <div class="row-2">
+      <div class="card-highlight">
+        <div>
+          <p class="secondary" style="margin-bottom: 8px; opacity: .6;">Território A — Recomendação Paladino</p>
+          <p class="primary" style="font-size: 36px; line-height: 44px;">Cozinha Brasileira Afetiva</p>
+        </div>
+        <p class="secondary">O eixo principal é o vínculo emocional com a cozinha brasileira — a memória, o pertencimento, a comida que reconforta e é verdadeira. O rigor e a integridade aparecem como consequência natural de quem cozinha com afeto, não como bandeira.</p>
+        <div>
+          <div class="tag-row" style="margin-bottom: 16px;">
+            <span class="tag tag--on-dark">Afetiva</span>
+            <span class="tag tag--on-dark">Brasileira</span>
+            <span class="tag tag--on-dark">Verdadeira</span>
+          </div>
+          <p class="status-line status-line--on-dark">Status: Validar nesta reunião</p>
+        </div>
+      </div>
+      <div class="card-text">
+        <div class="head">
+          <p class="category">Território B — Alternativa</p>
+          <p class="title">Cozinha Ética e Verdadeira</p>
+        </div>
+        <p class="description">O eixo principal é a posição declarada: o que o Galo Cinza não faz, não usa, não aceita. A ética é o filtro de tudo — insumos, fornecedores, processo. A afetividade aparece como resultado de uma cozinha íntegra.</p>
+        <div>
+          <div class="tag-row" style="margin-bottom: 16px;">
+            <span class="tag tag--on-light">Ética</span>
+            <span class="tag tag--on-light">Verdadeira</span>
+            <span class="tag tag--on-light">Rigorosa</span>
+          </div>
+          <p class="status-line status-line--on-light">Status: Validar nesta reunião</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE C — ARQUITETURA DE PORTFÓLIO (bloco composto: âncora full-width + linha 2 + linha 3 + nota) -->
+  <div class="slide-slot"><div class="slide" id="slide-c">
+    <div class="page-header-2">
+      <div class="heading-col">
+        <p class="caption">05</p>
+        <p class="heading-2">Arquitetura de portfólio</p>
+        <p class="subtitle-2">Âncora · Motor · Extensões</p>
+      </div>
+      <p class="paragraph-1 support">O Galo Cinza opera como marca guarda-chuva. O restaurante é a âncora — onde a reputação é construída e protegida. O que cresce a partir dele segue critério, não oportunismo.</p>
+    </div>
+
+    <div class="card-highlight" style="flex-direction: row; align-items: center; flex: 0 0 auto; gap: 40px;">
+      <p class="primary" style="flex: 1; font-size: 32px; line-height: 40px;">A marca que organiza tudo. Território, valores e linguagem que se aplicam a qualquer frente de negócio sob o guarda-chuva.</p>
+      <p class="secondary" style="width: 320px; flex-shrink: 0; text-align: right;">Bloco âncora — Marca Galo Cinza</p>
+    </div>
+
+    <div class="row-2" style="flex: 0 0 auto; height: 200px;">
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Âncora · Ativo</p>
+          <p class="title">Restaurante</p>
+        </div>
+        <p class="description">Base operacional e de reputação. Onde o cliente aprende o que o Galo Cinza é. Não escala por unidade — escala por referência.</p>
+      </div>
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Motor · Próximo passo</p>
+          <p class="title">Linha de congelados</p>
+        </div>
+        <p class="description">Conveniência íntegra. A filosofia da cozinha acessível fora do restaurante. Primeira frente de expansão com geração de receita fora do espaço físico.</p>
+      </div>
+    </div>
+
+    <div class="row-3" style="flex: 0 0 auto; height: 200px;">
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Extensão · Nova proposta</p>
+          <p class="title">Modelo de assinatura</p>
+        </div>
+        <p class="description">Receita previsível e fidelização. Membership por perfil de cliente — começa como camada sobre os congelados e o restaurante, evolui como produto autônomo.</p>
+      </div>
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Extensão · Nova proposta</p>
+          <p class="title">Linha infantil</p>
+        </div>
+        <p class="description">Derivado natural dos valores da marca. Alimentação infantil sem concessão de qualidade. Requer marca própria e modelo independente.</p>
+      </div>
+      <div class="card-text is-compact">
+        <div class="head">
+          <p class="category">Horizonte · Futuro</p>
+          <p class="title">Alta gastronomia brasileira</p>
+        </div>
+        <p class="description">Um segundo conceito — intimista, culinária brasileira multicultural. Porto Alegre não tem isso. A marca Galo Cinza teria autoridade para fazer.</p>
+      </div>
+    </div>
+
+    <p class="text-sm">Nota: O Instituto Galo Cinza foi avaliado durante o processo e não integra a arquitetura de marca neste momento. A estrutura acima representa o sistema que faz sentido agora.</p>
+  </div></div>
+
+  <!-- SLIDE D — CRITÉRIO DE EXPANSÃO (split assimétrico) -->
+  <div class="slide-slot"><div class="slide" id="slide-d">
+    <div class="split">
+      <div class="col-left">
+        <p class="heading-2" style="font-size: 44px; line-height: 52px;">Como avaliar qualquer ideia nova.</p>
+        <p class="paragraph-1" style="font-size: 20px; line-height: 28px; letter-spacing: 0;">Este instrumento foi desenvolvido durante o processo e validado em reunião. A partir de agora funciona como protocolo — toda nova iniciativa passa por aqui antes de entrar na agenda.</p>
+
+        <div class="text-block">
+          <p class="title">Como usar</p>
+          <p class="description">Antes de investir tempo ou dinheiro em qualquer expansão, aplique os quatro critérios. Se a ideia falhar em qualquer um deles, ela deve ser descartada ou reformulada antes de avançar.</p>
+        </div>
+
+        <div class="card-highlight" style="flex: 0 0 auto;">
+          <p class="secondary" style="opacity: .7;">Para Gabriel</p>
+          <p class="primary">Você concorda com estes quatro critérios como protocolo de decisão? Existe algum que acrescentaria com base na sua experiência do negócio?</p>
+        </div>
+      </div>
+      <div class="grid-2x2">
+        <div class="card-text is-compact">
+          <div class="head">
+            <p class="category">Critério 01</p>
+            <p class="title">Reforça ou dilui a identidade?</p>
+          </div>
+          <p class="description">A iniciativa é reconhecível como Galo Cinza? Qualquer pessoa que conhece a marca entenderia por que faz sentido?</p>
+        </div>
+        <div class="card-text is-compact">
+          <div class="head">
+            <p class="category">Critério 02</p>
+            <p class="title">Aumenta ou fragmenta o valor percebido?</p>
+          </div>
+          <p class="description">A iniciativa adiciona algo ao que o cliente já enxerga — ou abre uma frente que compete com a reputação construída?</p>
+        </div>
+        <div class="card-text is-compact">
+          <div class="head">
+            <p class="category">Critério 03</p>
+            <p class="title">Cria dependência ou autonomia?</p>
+          </div>
+          <p class="description">A iniciativa exige que Gabriel esteja presente para funcionar? Toda expansão deve caminhar para operação independente.</p>
+        </div>
+        <div class="card-text is-compact">
+          <div class="head">
+            <p class="category">Critério 04</p>
+            <p class="title">O restaurante aguenta sem impacto?</p>
+          </div>
+          <p class="description">A operação atual suporta essa expansão sem perder qualidade ou ritmo? O restaurante é a âncora — não pode ser sacrificado por novidade.</p>
+        </div>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE E — AS 4 ETAPAS MACRO (Timeline1, Active=True na etapa 01) -->
+  <div class="slide-slot"><div class="slide" id="slide-e">
+    <div class="page-header-2">
+      <div class="heading-col">
+        <p class="caption">11</p>
+        <p class="heading-2">O processo completo</p>
+        <p class="subtitle-2">Onde estamos e o que vem a seguir</p>
+      </div>
+      <p class="paragraph-1 support">O projeto Galo Cinza conclui hoje a Etapa 01. A aprovação desta Síntese abre a Etapa 02 — onde a marca começa a ganhar forma visual e verbal definitiva.</p>
+    </div>
+    <div class="timeline-row">
+      <div class="timeline-step is-active">
+        <div class="dot"></div>
+        <p class="title">01 — Imersão Ontológica</p>
+        <p class="status">Concluída · Tese ✓ · Antítese ✓ · Síntese ✓</p>
+        <p class="description">Investigação de fundamentos. O negócio foi lido, questionado e estruturado. Território, portfólio e critério de expansão definidos.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <p class="title">02 — Formulação Estratégica</p>
+        <p class="status">A seguir</p>
+        <p class="description">Proposta de valor, território nomeado e aprovado, DNA verbal, Look &amp; Feel direcional. A marca começa a ganhar forma.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <p class="title">03 — Estruturação Simbólica</p>
+        <p class="status">&nbsp;</p>
+        <p class="description">Tipografia, cor, forma, tom de voz. Tradução rigorosa da estratégia em sistema de linguagem e identidade visual.</p>
+      </div>
+      <div class="timeline-step">
+        <div class="dot"></div>
+        <p class="title">04 — Ativação Sistêmica</p>
+        <p class="status">&nbsp;</p>
+        <p class="description">Guidelines, playbooks e autonomia operacional. A marca funciona com independência e sem diluição ao longo do tempo.</p>
+      </div>
+    </div>
+  </div></div>
+
+  <!-- SLIDE F — ENTREGÁVEIS DO PROJETO (grade 2 col, 7 células, texto longo) -->
+  <div class="slide-slot"><div class="slide" id="slide-f">
+    <div class="page-header-2">
+      <div class="heading-col">
+        <p class="caption">13</p>
+        <p class="heading-2">Entregáveis do projeto</p>
+      </div>
+      <p class="paragraph-1 support">O que foi contratado. Estes são os ativos que compõem o ecossistema entregue ao Galo Cinza ao final do projeto — não peças isoladas, mas um sistema de gestão de marca.</p>
+    </div>
+    <div class="grid-2col">
+      <div class="card-text is-compact" style="flex: none;">
+        <div class="head">
+          <p class="category">Entregável 01</p>
+          <p class="title">Brand Guide — O Galo Cinza</p>
+        </div>
+        <p class="description">Documento central da marca. Consolida posicionamento, propósito, missão, visão, valores, linguagem e diretrizes de uso. Formaliza a Camada Ontológica e a Camada Simbólica. É a fonte de verdade da marca.</p>
+      </div>
+      <div class="card-text is-compact" style="flex: none;">
+        <div class="head">
+          <p class="category">Entregável 02</p>
+          <p class="title">Brand System — Figma</p>
+        </div>
+        <p class="description">Ambiente de engenharia visual. Traduz a estratégia em sistema operativo com tokens e componentes inteligentes. Garante consistência absoluta entre produto e comunicação. A marca evolui sem perder integridade.</p>
+      </div>
+      <div class="card-text is-compact" style="flex: none;">
+        <div class="head">
+          <p class="category">Entregável 03</p>
+          <p class="title">Biblioteca de Assets + Templates Digitais</p>
+        </div>
+        <p class="description">Logos, elementos gráficos e materiais institucionais prontos para uso. Modelos editáveis para redes sociais, apresentações e comunicação. Ativação Sistêmica em formato prático — presença de mercado como extensão direta da estratégia.</p>
+      </div>
+      <div class="card-text is-compact" style="flex: none;">
+        <div class="head">
+          <p class="category">Entregável 04</p>
+          <p class="title">Creative &amp; Art Direction Playbook</p>
+        </div>
+        <p class="description">Guia de alta curadoria para a Camada Simbólica. Define olhar, enquadramento, estilo de tratamento e narrativa visual. Qualquer produção futura — campanhas, sessões fotográficas — respeita a densidade visual da marca.</p>
+      </div>
+      <div class="card-text is-compact" style="flex: none;">
+        <div class="head">
+          <p class="category">Entregável 05</p>
+          <p class="title">Editorial Playbook</p>
+        </div>
+        <p class="description">Sistema de governança de conteúdo. Define Do's &amp; Don'ts, linha editorial e comportamento verbal em cada canal — incluindo workflow de produção para o Instagram. A marca não apenas fala: se posiciona com autoridade.</p>
+      </div>
+      <div class="card-text is-compact" style="flex: none;">
+        <div class="head">
+          <p class="category">Entregáveis 06 + 07</p>
+          <p class="title">Biblioteca de Embalagens + Indicação de Profissionais</p>
+        </div>
+        <p class="description">Diretrizes visuais com mockups de embalagens para a linha de produtos congelados (faca + arte final não incluída). Mapeamento e sugestão de designers, fotógrafos e fornecedores para manutenção e evolução da marca após o projeto.</p>
+      </div>
+    </div>
+  </div></div>
+
+</div>
+
+<script>
+  function fitSlides() {
+    var margin = 48;
+    var scale = Math.min(1, (window.innerWidth - margin) / 1920);
+    document.querySelectorAll('.slide').forEach(function (slide) {
+      slide.style.transform = 'scale(' + scale + ')';
+      slide.style.marginBottom = (-1080 * (1 - scale)) + 'px';
+    });
+  }
+  window.addEventListener('resize', fitSlides);
+  fitSlides();
+</script>
+
+</body>
+</html>
