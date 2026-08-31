@@ -1,10 +1,8 @@
 # PALADINO — Design Tokens
 
 Fonte: Figma, arquivo TMS Marketing (página Styles).
-Status: valores extraídos do template comprado. A paleta ainda não foi
-confrontada com o off-white/near-black já usado no sistema HTML existente —
-tratar como referência estrutural até essa checagem acontecer. A tipografia
-já pode ser tratada como confirmada.
+Status: valores extraídos do template comprado. Tipografia e paleta
+confirmadas como definitivas do Paladino em 2026-08-30.
 
 ## Cor
 
